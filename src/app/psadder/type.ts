@@ -11,7 +11,7 @@ export type Problem = {
 };
 
 export type UpdateProblem = {
-  id: number;
+  id: string;
   pid: number;
   name: string;
   difficulty: number;
@@ -30,8 +30,9 @@ export type Testcase = {
 };
 
 export type ProblemSummary = {
-  id: number;
+  id: string;
   pid: number;
+  difficulty: number;
   title: string;
   description: string;
   category: string;

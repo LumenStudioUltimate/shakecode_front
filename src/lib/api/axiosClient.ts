@@ -14,6 +14,9 @@ const instance = axios.create({
   },
 });
 
+// Issue: too slow
+// TODO: wait for only auth requests
+// wait until previous request is being resolved
 instance.interceptors.request.use(
   (config) =>
     new Promise((resolve, reject) => {
@@ -45,7 +48,7 @@ instance.interceptors.response.use(
         await refreshJWT({ token: refreshToken });
         return instance.request(error.config);
       } catch (e) {
-        logout(true);
+        await logout(true);
       }
     }
     return Promise.reject(error);

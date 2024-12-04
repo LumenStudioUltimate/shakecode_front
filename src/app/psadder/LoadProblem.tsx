@@ -1,11 +1,12 @@
 "use client";
 
 import { Property } from "csstype";
+import { Parser as Html2ReactParser } from "html-to-react";
 import { Dispatch, SetStateAction, useState } from "react";
 import Modal from "react-modal";
 import { toast } from "react-toastify";
 
-import { ProblemSummary } from "@/app/psadder/type";
+import { ProblemSummary, Ranks } from "@/app/psadder/type";
 import { getList } from "@/lib/api/problem.api";
 
 import FlexDirection = Property.FlexDirection;
@@ -77,8 +78,8 @@ const LoadProblem = ({
         <table style={{ width: "100%" }}>
           <thead>
             <tr>
-              <th>전역 문제 번호</th>
-              <th>PUBLIC 문제 번호</th>
+              <th>문제 번호</th>
+              <th>난이도: </th>
               <th>문제 이름</th>
               <th>카테고리</th>
               <th>설명</th>
@@ -95,21 +96,28 @@ const LoadProblem = ({
                   p.description.indexOf(search) !== -1 ||
                   p.category.indexOf(search) !== -1,
               )
-              .map((problem, index) => (
-                <tr
-                  key={index}
-                  style={{ textAlign: "center" }}
-                  onClick={() => openProblem(problem.id.toString())}>
-                  <td style={{ padding: "4px" }}>{problem.id}</td>
-                  <td style={{ padding: "4px" }}>{problem.pid}</td>
-                  <td style={{ padding: "4px" }}>{problem.title}</td>
-                  <td style={{ padding: "4px" }}>{problem.category}</td>
-                  <td style={{ padding: "4px" }}>
-                    {problem.description.slice(0, 80)}
-                    {problem.description.length > 80 ? "..." : ""}
-                  </td>
-                </tr>
-              ))}
+              .map((problem, index) => {
+                const rank = Html2ReactParser().parse(
+                  Ranks[parseInt(problem.difficulty.toString())],
+                );
+                return (
+                  <tr
+                    key={index}
+                    style={{ textAlign: "center" }}
+                    onClick={() => openProblem(problem.id.toString())}>
+                    <td style={{ padding: "4px" }}>{problem.pid}</td>
+                    <td style={{ padding: "4px" }}>
+                      {rank}: {problem.difficulty}
+                    </td>
+                    <td style={{ padding: "4px" }}>{problem.title}</td>
+                    <td style={{ padding: "4px" }}>{problem.category}</td>
+                    <td style={{ padding: "4px" }}>
+                      {problem.description.slice(0, 80)}
+                      {problem.description.length > 80 ? "..." : ""}
+                    </td>
+                  </tr>
+                );
+              })}
           </tbody>
         </table>
       </Modal>

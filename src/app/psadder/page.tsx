@@ -70,9 +70,10 @@ const PSAdder = () => {
     }
   };
 
+  // TODO: automatically save as file when auth failed.
   const intermediateSave = () => {
     const data: UpdateProblem = {
-      id: parseInt(id),
+      id: id,
       pid: parseInt(pid),
       name,
       difficulty,
@@ -169,7 +170,7 @@ const PSAdder = () => {
     toast
       .promise(
         ProblemApi.update({
-          id: parseInt(id),
+          id: id,
           pid: parseInt(pid),
           name: name,
           difficulty,
@@ -202,7 +203,7 @@ const PSAdder = () => {
   const del = () => {
     if (confirm("정말 삭제하시겠습니까?")) {
       toast
-        .promise(deleteProblem(parseInt(id)), {
+        .promise(deleteProblem(id), {
           pending: "삭제중입니다...",
           success: "삭제에 성공하였습니다.",
           error: "삭제에 실패하였습니다.",
@@ -231,13 +232,13 @@ const PSAdder = () => {
 
   useEffect(() => {
     if (
-      parseInt(id) &&
+      id &&
       (isSaved ||
         (!isSaved &&
           confirm("수정사항을 무시하고 새로운 문제를 불러오시겠습니까?")))
     ) {
       toast
-        .promise(ProblemApi.getFull(parseInt(id)), {
+        .promise(ProblemApi.getFull(id), {
           pending: "불러오는 중...",
           success: "불러오기 성공",
           error: "불러오기 실패",
