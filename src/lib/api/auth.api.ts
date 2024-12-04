@@ -73,7 +73,7 @@ export const logout = async (doNotRemoveToken = false) => {
 };
 
 export const refreshJWT = async ({ token }: { token: string }) => {
-  const { data } = await client.post("/auth/refresh", { token });
+  const { data } = await client.post("/auth/refresh", { refreshToken: token });
   cookie.set("token", data.accessToken, {});
   localStorage.setItem("refresh", data.refreshToken);
 };

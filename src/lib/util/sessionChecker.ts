@@ -1,8 +1,12 @@
-import { ping } from "@/lib/api/auth.api";
+import { ping, refreshJWT } from "@/lib/api/auth.api";
 
 const SessionChecker = () => {
   ping().then((p) => {
-    if (!p) location.href = "/login?redirect=" + location.pathname;
+    if (!p) {
+      refreshJWT({ token: localStorage.getItem("refresh") || "" }).catch(() => {
+        location.href = "/login?redirect=" + location.pathname;
+      });
+    }
   });
 };
 
